@@ -136,11 +136,16 @@ export async function giveAppPermissionAccess({
 
 	elements = [];
 	const authSheet = await pWaitFor(async () => {
-		elements = await getElements(context, 'System Preferences');
+		elements = await getElements('System Preferences');
 		const authSheet = elements.find((element) =>
 			element.path.some((part) => part.fullName === 'sheet 1')
 		);
-		return [authSheet !== undefined, authSheet];
+
+		if (authSheet !== undefined) {
+			return [true, authSheet];
+		}
+
+		return false;
 	});
 
 	await waitForElementExists({
