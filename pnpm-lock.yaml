@@ -12,7 +12,7 @@ specifiers:
   lion-git-hooks: ^1.0.2
   lion-system: latest
   outdent: ^0.8.0
-  p-wait-for: ^4.1.0
+  p-wait-for: npm:@leonzalion/p-wait-for@^4.2.0
   parse-applescript: ^1.0.1
   prettier: ^2.5.1
   tsc-alias: ^1.6.1
@@ -22,7 +22,7 @@ specifiers:
 dependencies:
   execa: 6.1.0
   outdent: 0.8.0
-  p-wait-for: 4.1.0
+  p-wait-for: /@leonzalion/p-wait-for/4.2.0
   parse-applescript: 1.0.1
 
 devDependencies:
@@ -304,6 +304,13 @@ packages:
       - supports-color
       - typescript
     dev: true
+
+  /@leonzalion/p-wait-for/4.2.0:
+    resolution: {integrity: sha512-6Ts/niwsCX+WdQfRN+NrB57auBc7u/30qZ9BkaKw/uDHVORpJD5/FP9aupR7sxi5ULgRCPy6MTm1+uaC6HFmEg==}
+    engines: {node: '>=12'}
+    dependencies:
+      p-timeout: 5.0.2
+    dev: false
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -3416,13 +3423,6 @@ packages:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
     engines: {node: '>=6'}
     dev: true
-
-  /p-wait-for/4.1.0:
-    resolution: {integrity: sha512-i8nE5q++9h8oaQHWltS1Tnnv4IoMDOlqN7C0KFG2OdbK0iFJIt6CROZ8wfBM+K4Pxqfnq4C4lkkpXqTEpB5DZw==}
-    engines: {node: '>=12'}
-    dependencies:
-      p-timeout: 5.0.2
-    dev: false
 
   /package-json/6.5.0:
     resolution: {integrity: sha512-k3bdm2n25tkyxcjSKzB5x8kfVxlMdgsbPr0GkZcwHsLpba6cBjqCt1KlcChKEvxHIcTB1FVMuwoijZ26xex5MQ==}

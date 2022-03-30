@@ -27,7 +27,7 @@
 	"dependencies": {
 		"execa": "^6.1.0",
 		"outdent": "^0.8.0",
-		"p-wait-for": "^4.1.0",
+		"p-wait-for": "npm:@leonzalion/p-wait-for@^4.2.0",
 		"parse-applescript": "^1.0.1"
 	},
 	"devDependencies": {
