@@ -1,10 +1,12 @@
 import { outdent } from 'outdent';
 import pWaitFor from 'p-wait-for';
-import type { ElementReference } from '~/types/element-path.js';
-import { runAppleScript } from '~/utils/applescript.js';
-import { toggleCheckbox } from '~/utils/gui-scripting/checkbox.js';
-import { createElementReferences } from '~/utils/gui-scripting/element-path.js';
-import { clickElement, getElements } from '~/utils/gui-scripting/ui.js';
+import { runAppleScript } from '~/utils/run.js';
+import { toggleCheckbox } from '~/utils/checkbox.js';
+import {
+	createElementReferences,
+	clickElement,
+	getElements,
+} from '~/utils/element.js';
 import {
 	waitForElementExists,
 	waitForElementHidden,
@@ -12,9 +14,8 @@ import {
 } from '~/utils/window.js';
 
 // https://apple.stackexchange.com/questions/422165/applescript-system-preferences-automation
-export async function reopenSystemPreferences(context: BootstrapperContext) {
+export async function reopenSystemPreferences() {
 	await runAppleScript(
-		context,
 		outdent`
 			-- Check to see if System Preferences is
 			-- running and if yes, then close it.
@@ -62,9 +63,10 @@ type OpenSystemPreferencesPaneProps = {
 	paneId: keyof typeof paneIdToName;
 	anchor?: keyof typeof paneAnchors;
 };
-export async function openSystemPreferencesPane(
-	{ paneId, anchor }: OpenSystemPreferencesPaneProps
-) {
+export async function openSystemPreferencesPane({
+	paneId,
+	anchor,
+}: OpenSystemPreferencesPaneProps) {
 	await runAppleScript(
 		outdent`
 			tell application "System Preferences"
@@ -75,7 +77,7 @@ export async function openSystemPreferencesPane(
 		`
 	);
 
-	await waitForWindow(context, {
+	await waitForWindow({
 		windowName: paneIdToName[paneId],
 		processName: 'System Preferences',
 	});
@@ -84,20 +86,24 @@ export async function openSystemPreferencesPane(
 type GiveAppPermissionAccessProps = {
 	appName: string;
 	permissionName: string;
+	adminCredentials?: {
+		username: string;
+		password: string;
+	};
 };
-export async function giveAppPermissionAccess(
-	context: BootstrapperContext,
-	{ appName, permissionName }: GiveAppPermissionAccessProps
-) {
-	await reopenSystemPreferences(context);
-	await openSystemPreferencesPane(context, {
+export async function giveAppPermissionAccess({
+	appName,
+	permissionName,
+	adminCredentials,
+}: GiveAppPermissionAccessProps) {
+	await reopenSystemPreferences();
+	await openSystemPreferencesPane({
 		paneId: 'com.apple.preference.security',
 		anchor: 'Privacy',
 	});
 
 	let elements = createElementReferences(
 		(await runAppleScript(
-			context,
 			outdent`
 				tell application "System Events"
 					-- Focus on the sidebar
@@ -126,37 +132,36 @@ export async function giveAppPermissionAccess(
 		throw new Error('Lock button not found.');
 	}
 
-	await clickElement(context, lockButton);
-
-	const { username, password } = await getAdminCredentials(context);
+	await clickElement(lockButton);
 
 	elements = [];
-	const authSheet = await pWaitFor<ElementReference>(async (resolve) => {
+	const authSheet = await pWaitFor(async () => {
 		elements = await getElements(context, 'System Preferences');
 		const authSheet = elements.find((element) =>
 			element.path.some((part) => part.fullName === 'sheet 1')
 		);
-		return authSheet ? resolve(authSheet) : false;
+		return [authSheet !== undefined, authSheet];
 	});
 
-	await waitForElementExists(context, {
+	await waitForElementExists({
 		elementReference: authSheet,
 	});
 
-	await runAppleScript(
-		context,
-		outdent`
-			tell application "System Events"
-				keystroke ${JSON.stringify(username)}
-				keystroke tab
-				delay 0.5
-				keystroke ${JSON.stringify(password)}
-				key code 36
-			end tell
-		`
-	);
+	if (adminCredentials !== undefined) {
+		await runAppleScript(
+			outdent`
+				tell application "System Events"
+					keystroke ${JSON.stringify(adminCredentials.username)}
+					keystroke tab
+					delay 0.5
+					keystroke ${JSON.stringify(adminCredentials.password)}
+					key code 36
+				end tell
+			`
+		);
+	}
 
-	await waitForElementHidden(context, {
+	await waitForElementHidden({
 		elementReference: authSheet,
 	});
 
@@ -170,19 +175,19 @@ export async function giveAppPermissionAccess(
 		throw new Error(`Permissions checkbox for app ${appName} not found.`);
 	}
 
-	await toggleCheckbox(context, { element: appCheckbox, value: true });
+	await toggleCheckbox({ element: appCheckbox, value: true });
 }
 
 /**
 Whenever software is blocked from loading (e.g. unidentified developer)
 */
-export async function allowSystemSoftware(context: BootstrapperContext) {
-	await reopenSystemPreferences(context);
-	await openSystemPreferencesPane(context, {
+export async function allowSystemSoftware() {
+	await reopenSystemPreferences();
+	await openSystemPreferencesPane({
 		paneId: 'com.apple.preference.security',
 		anchor: 'General',
 	});
-	const elements = await getElements(context, 'System Preferences');
+	const elements = await getElements('System Preferences');
 	const allowButton = elements.find((element) =>
 		element.path.some(
 			(part) =>
@@ -195,5 +200,5 @@ export async function allowSystemSoftware(context: BootstrapperContext) {
 		throw new Error(`Click button for system software was undefined.`);
 	}
 
-	await clickElement(context, allowButton);
+	await clickElement(allowButton);
 }
