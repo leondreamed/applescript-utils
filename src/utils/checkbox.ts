@@ -1,4 +1,5 @@
 import { outdent } from 'outdent';
+
 import type { ElementReference } from '~/types/element.js';
 import { runAppleScript } from '~/utils/run.js';
 

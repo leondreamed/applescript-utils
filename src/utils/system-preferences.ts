@@ -1,12 +1,13 @@
 import { outdent } from 'outdent';
 import pWaitFor from 'p-wait-for';
-import { runAppleScript } from '~/utils/run.js';
+
 import { toggleCheckbox } from '~/utils/checkbox.js';
 import {
-	createElementReferences,
 	clickElement,
+	createElementReferences,
 	getElements,
 } from '~/utils/element.js';
+import { runAppleScript } from '~/utils/run.js';
 import {
 	waitForElementExists,
 	waitForElementHidden,
