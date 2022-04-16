@@ -1,3 +1,3 @@
 # AppleScript Utilities
 
-[![npm version](https://badge.fury.io/js/applescript-utils.svg)](https://badge.fury.io/js/applescript-utils)
+[![npm version](https://img.shields.io/npm/v/applescript-utils)](https://npmjs.com/package/applescript-utils)
