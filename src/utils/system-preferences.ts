@@ -142,11 +142,7 @@ export async function giveAppPermissionAccess({
 			element.path.some((part) => part.fullName === 'sheet 1')
 		);
 
-		if (authSheet !== undefined) {
-			return [true, authSheet];
-		}
-
-		return false;
+		return authSheet !== undefined && pWaitFor.resolveWith(authSheet);
 	});
 
 	await waitForElementExists({
