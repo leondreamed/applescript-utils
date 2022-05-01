@@ -156,7 +156,7 @@ export async function waitForElementHidden({
 export async function waitForElementMatch(
 	windowName: string,
 	elementMatcher: (element: ElementReference) => boolean,
-	options: PWaitForOptions
+	options?: PWaitForOptions
 ) {
 	const matchingElement = await pWaitFor(async () => {
 		const elements = await getElements(windowName);
