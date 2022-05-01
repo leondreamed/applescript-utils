@@ -4,6 +4,20 @@
 
 Some utilities for working with AppleScript.
 
+## Installation
+
+```shell
+npm install applescript-utils
+```
+
+## Usage
+
+```javascript
+import { getElements } from 'applescript-utils';
+
+await getElements('System Preferences');
+```
+
 ## API
 
 ### getElements(processName)
