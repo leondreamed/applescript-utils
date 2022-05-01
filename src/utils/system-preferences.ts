@@ -49,24 +49,16 @@ export async function reopenSystemPreferences() {
 	);
 }
 
-const paneIdToName = {
-	'com.apple.preference.security': 'Privacy & Security',
-	'com.apple.preference.trackpad': 'Trackpad',
-	'com.apple.preference.keyboard': 'Keyboard',
-} as const;
-
-const paneAnchors = {
-	General: 'General',
-	Privacy: 'Privacy',
-} as const;
-
 type OpenSystemPreferencesPaneProps = {
-	paneId: keyof typeof paneIdToName;
-	anchor?: keyof typeof paneAnchors;
+	paneId: string;
+	windowName: string;
+	anchor?: string;
 };
+
 export async function openSystemPreferencesPane({
 	paneId,
 	anchor,
+	windowName,
 }: OpenSystemPreferencesPaneProps) {
 	await runAppleScript(
 		outdent`
@@ -79,7 +71,7 @@ export async function openSystemPreferencesPane({
 	);
 
 	await waitForWindow({
-		windowName: paneIdToName[paneId],
+		windowName,
 		processName: 'System Preferences',
 	});
 }
@@ -101,6 +93,7 @@ export async function giveAppPermissionAccess({
 	await openSystemPreferencesPane({
 		paneId: 'com.apple.preference.security',
 		anchor: 'Privacy',
+		windowName: 'Privacy & Security',
 	});
 
 	let elements = createElementReferences(
@@ -188,6 +181,7 @@ export async function allowSystemSoftware() {
 	await openSystemPreferencesPane({
 		paneId: 'com.apple.preference.security',
 		anchor: 'General',
+		windowName: 'Privacy & Security',
 	});
 	const elements = await getElements('System Preferences');
 	const allowButton = elements.find((element) =>
