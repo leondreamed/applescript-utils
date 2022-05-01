@@ -1,4 +1,6 @@
 import { outdent } from 'outdent';
+import type { Options as PWaitForOptions } from 'p-wait-for';
+import pWaitFor from 'p-wait-for';
 
 import type { ElementPathPart, ElementReference } from '~/types/element.js';
 import { runAppleScript } from '~/utils/run.js';
@@ -107,4 +109,65 @@ export function createElementReferences(elementPathStrings: string[]) {
 	return elementPathStrings.map((elementPathString) =>
 		createElementReference(elementPathString)
 	);
+}
+
+type WaitForElementProps = {
+	elementReference: ElementReference;
+	interval?: number;
+};
+export async function waitForElementExists({
+	elementReference,
+	interval = 0.1,
+}: WaitForElementProps) {
+	await runAppleScript(
+		outdent`
+			tell application "System Events"
+				tell process ${JSON.stringify(elementReference.applicationProcess)}
+						repeat until exists ${elementReference.pathString}
+								delay ${interval}
+						end repeat
+				end tell
+			end tell
+		`
+	);
+}
+
+type WaitForElementHiddenProps = {
+	elementReference: ElementReference;
+	interval?: number;
+};
+export async function waitForElementHidden({
+	elementReference,
+	interval = 0.1,
+}: WaitForElementHiddenProps) {
+	await runAppleScript(
+		outdent`
+			tell application "System Events"
+				tell process ${JSON.stringify(elementReference.applicationProcess)}
+						repeat while exists ${elementReference}
+								delay ${interval}
+						end repeat
+				end tell
+			end tell
+		`
+	);
+}
+
+export async function waitForElementMatch(
+	windowName: string,
+	elementMatcher: (element: ElementReference) => boolean,
+	options: PWaitForOptions
+) {
+	const matchingElement = await pWaitFor(async () => {
+		const elements = await getElements(windowName);
+		for (const element of elements) {
+			if (elementMatcher(element) !== undefined) {
+				return pWaitFor.resolveWith(element);
+			}
+		}
+
+		return false;
+	}, options);
+
+	return matchingElement;
 }

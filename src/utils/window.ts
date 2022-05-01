@@ -1,6 +1,5 @@
 import { outdent } from 'outdent';
 
-import type { ElementReference } from '~/types/element.js';
 import { runAppleScript } from '~/utils/run.js';
 
 type WaitForWindowProps = {
@@ -30,48 +29,6 @@ export async function waitForWindow({
 					set i to i + 1
 					if i ≥ ${numAttempts} then return
 				end repeat
-			end tell
-		`
-	);
-}
-
-type WaitForElementProps = {
-	elementReference: ElementReference;
-	interval?: number;
-};
-export async function waitForElementExists({
-	elementReference,
-	interval = 0.1,
-}: WaitForElementProps) {
-	await runAppleScript(
-		outdent`
-			tell application "System Events"
-				tell process ${JSON.stringify(elementReference.applicationProcess)}
-						repeat until exists ${elementReference.pathString}
-								delay ${interval}
-						end repeat
-				end tell
-			end tell
-		`
-	);
-}
-
-type WaitForElementHiddenProps = {
-	elementReference: ElementReference;
-	interval?: number;
-};
-export async function waitForElementHidden({
-	elementReference,
-	interval = 0.1,
-}: WaitForElementHiddenProps) {
-	await runAppleScript(
-		outdent`
-			tell application "System Events"
-				tell process ${JSON.stringify(elementReference.applicationProcess)}
-						repeat while exists ${elementReference}
-								delay ${interval}
-						end repeat
-				end tell
 			end tell
 		`
 	);

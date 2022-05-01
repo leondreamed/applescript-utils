@@ -4,7 +4,11 @@ export {
 	createElementReference,
 	createElementReferences,
 	getElements,
+	waitForElementExists,
+	waitForElementHidden,
+	waitForElementMatch,
 } from './utils/element.js';
+export { inputKeystrokes } from './utils/keystroke.js';
 export { runAppleScript } from './utils/run.js';
 export {
 	allowSystemSoftware,
@@ -12,8 +16,4 @@ export {
 	openSystemPreferencesPane,
 	reopenSystemPreferences,
 } from './utils/system-preferences.js';
-export {
-	waitForElementExists,
-	waitForElementHidden,
-	waitForWindow,
-} from './utils/window.js';
+export { waitForWindow } from './utils/window.js';

@@ -6,13 +6,11 @@ import {
 	clickElement,
 	createElementReferences,
 	getElements,
-} from '~/utils/element.js';
-import { runAppleScript } from '~/utils/run.js';
-import {
 	waitForElementExists,
 	waitForElementHidden,
-	waitForWindow,
-} from '~/utils/window.js';
+} from '~/utils/element.js';
+import { runAppleScript } from '~/utils/run.js';
+import { waitForWindow } from '~/utils/window.js';
 
 // https://apple.stackexchange.com/questions/422165/applescript-system-preferences-automation
 export async function reopenSystemPreferences() {
