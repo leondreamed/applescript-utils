@@ -161,7 +161,7 @@ export async function waitForElementMatch(
 	const matchingElement = await pWaitFor(async () => {
 		const elements = await getElements(windowName);
 		for (const element of elements) {
-			if (elementMatcher(element) !== undefined) {
+			if (elementMatcher(element)) {
 				return pWaitFor.resolveWith(element);
 			}
 		}

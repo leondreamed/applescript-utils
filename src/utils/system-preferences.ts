@@ -1,5 +1,4 @@
 import { outdent } from 'outdent';
-import pWaitFor from 'p-wait-for';
 
 import { toggleCheckbox } from '~/utils/checkbox.js';
 import {
@@ -8,6 +7,7 @@ import {
 	getElements,
 	waitForElementExists,
 	waitForElementHidden,
+	waitForElementMatch,
 } from '~/utils/element.js';
 import { runAppleScript } from '~/utils/run.js';
 import { waitForWindow } from '~/utils/window.js';
@@ -94,7 +94,7 @@ export async function giveAppPermissionAccess({
 		windowName: 'Privacy & Security',
 	});
 
-	let elements = createElementReferences(
+	const elements = createElementReferences(
 		(await runAppleScript(
 			outdent`
 				tell application "System Events"
@@ -126,15 +126,9 @@ export async function giveAppPermissionAccess({
 
 	await clickElement(lockButton);
 
-	elements = [];
-	const authSheet = await pWaitFor(async () => {
-		elements = await getElements('System Preferences');
-		const authSheet = elements.find((element) =>
-			element.path.some((part) => part.fullName === 'sheet 1')
-		);
-
-		return authSheet !== undefined && pWaitFor.resolveWith(authSheet);
-	});
+	const authSheet = await waitForElementMatch('System Preferences', (element) =>
+		element.path.some((part) => part.fullName === 'sheet 1')
+	);
 
 	await waitForElementExists({
 		elementReference: authSheet,
