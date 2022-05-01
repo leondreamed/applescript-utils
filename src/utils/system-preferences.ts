@@ -62,8 +62,14 @@ export async function openSystemPreferencesPane({
 		outdent`
 			tell application "System Preferences"
 				activate
-				reveal pane id ${JSON.stringify(paneId)}
-				${anchor === undefined ? '' : JSON.stringify(anchor)}
+				set current pane to pane id ${JSON.stringify(paneId)}
+				${
+					anchor === undefined
+						? ''
+						: `reveal anchor ${JSON.stringify(
+								anchor
+						  )} of pane id ${JSON.stringify(paneId)}`
+				}
 			end tell
 		`
 	);
