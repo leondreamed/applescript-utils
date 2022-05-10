@@ -21,5 +21,6 @@ export {
 	openSystemPreferencesPane,
 	reopenSystemPreferences,
 } from './utils/system-preferences.js';
+export { getTableRows, selectTableRow } from './utils/table.js';
 export { setTextFieldValue } from './utils/text-field.js';
 export { waitForWindow } from './utils/window.js';

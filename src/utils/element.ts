@@ -25,7 +25,7 @@ export async function getElements(
 	return elements;
 }
 
-export async function clickElement(element: ElementReference) {
+export async function clickElement(element: BaseElementReference) {
 	await runAppleScript(
 		outdent`
 			tell application "System Events"
@@ -147,7 +147,7 @@ export async function waitForElementExists({
 }
 
 type WaitForElementHiddenProps = {
-	elementReference: ElementReference;
+	elementReference: BaseElementReference;
 	interval?: number;
 };
 export async function waitForElementHidden({

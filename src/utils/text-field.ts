@@ -1,10 +1,10 @@
 import { outdent } from 'outdent';
 
-import type { ElementReference } from '~/utils/element-reference.js';
+import type { BaseElementReference } from '~/utils/element-reference.js';
 import { runAppleScript } from '~/utils/run.js';
 
 export async function setTextFieldValue(
-	element: ElementReference,
+	element: BaseElementReference,
 	text: string
 ) {
 	await runAppleScript(outdent`
