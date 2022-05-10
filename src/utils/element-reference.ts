@@ -66,4 +66,8 @@ export class ElementReference extends BaseElementReference {
 			elementIndex: this.elementIndex - 1,
 		});
 	}
+
+	get baseElement() {
+		return this.baseElements[this.elementIndex];
+	}
 }
