@@ -102,13 +102,14 @@ export async function waitForElementHidden({
 
 export async function waitForElementMatch(
 	windowName: string,
-	elementMatcher: (element: ElementReference) => boolean,
+	elementMatcher: (element: ElementReference) => boolean | Promise<boolean>,
 	pWaitForOptions?: PWaitForOptions
 ) {
 	const matchingElement = await pWaitFor(async () => {
 		const elements = await getElements(windowName);
 		for (const element of elements) {
-			if (elementMatcher(element)) {
+			// eslint-disable-next-line no-await-in-loop
+			if (await elementMatcher(element)) {
 				return pWaitFor.resolveWith(element);
 			}
 		}
