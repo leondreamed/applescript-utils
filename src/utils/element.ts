@@ -105,6 +105,11 @@ export async function waitForElementMatch(
 	elementMatcher: (element: ElementReference) => boolean | Promise<boolean>,
 	pWaitForOptions?: PWaitForOptions
 ) {
+	pWaitForOptions = {
+		timeout: 5000,
+		...pWaitForOptions,
+	};
+
 	const matchingElement = await pWaitFor(async () => {
 		const elements = await getElements(windowName);
 		for (const element of elements) {
