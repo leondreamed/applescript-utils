@@ -1,4 +1,4 @@
-export type ElementPathPart = {
+export interface ElementPathPart {
 	type: string;
 	name: string;
 
@@ -6,11 +6,4 @@ export type ElementPathPart = {
 	The type and name combined.
  	*/
 	fullName: string;
-};
-
-export type ElementReference = {
-	path: ElementPathPart[];
-	pathString: string;
-	applicationProcess: string;
-	application: string;
-};
+}

@@ -1,12 +1,13 @@
 import { outdent } from 'outdent';
 
-import type { ElementReference } from '~/types/element.js';
+import type { ElementReference } from '~/utils/element-reference.js';
 import { runAppleScript } from '~/utils/run.js';
 
-type ToggleCheckboxProps = {
+interface ToggleCheckboxProps {
 	element: ElementReference;
 	value?: boolean;
-};
+}
+
 export async function toggleCheckbox(props: ToggleCheckboxProps) {
 	let checkboxAction: string;
 	switch (props.value) {

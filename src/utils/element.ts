@@ -2,7 +2,9 @@ import { outdent } from 'outdent';
 import type { Options as PWaitForOptions } from 'p-wait-for';
 import pWaitFor from 'p-wait-for';
 
-import type { ElementPathPart, ElementReference } from '~/types/element.js';
+import type { ElementPathPart } from '~/types/element.js';
+import type { BaseElementReference } from '~/utils/element-reference.js';
+import { ElementReference } from '~/utils/element-reference.js';
 import { runAppleScript } from '~/utils/run.js';
 
 export async function getElements(
@@ -36,9 +38,9 @@ export async function clickElement(element: ElementReference) {
 	);
 }
 
-export function createElementReference(
+export function createBaseElementReference(
 	elementPathString: string
-): ElementReference {
+): BaseElementReference {
 	const pathPartStrings: string[] = [];
 
 	let curIndex = 0;
@@ -105,10 +107,22 @@ export function createElementReference(
 	};
 }
 
-export function createElementReferences(elementPathStrings: string[]) {
-	return elementPathStrings.map((elementPathString) =>
-		createElementReference(elementPathString)
+export function createElementReferences(
+	elementPathStrings: string[]
+): ElementReference[] {
+	const baseElementReferences = elementPathStrings.map((elementPathString) =>
+		createBaseElementReference(elementPathString)
 	);
+
+	const elementReferences: ElementReference[] = baseElementReferences.map(
+		(_, elementIndex) =>
+			new ElementReference({
+				baseElements: baseElementReferences,
+				elementIndex,
+			})
+	);
+
+	return elementReferences;
 }
 
 type WaitForElementProps = {
