@@ -2,6 +2,7 @@ import { outdent } from 'outdent';
 
 import { createBaseElementReference } from '~/utils/element.js';
 import type { BaseElementReference } from '~/utils/element-reference.js';
+import { pathPartsToPathString } from '~/utils/path.js';
 import { runAppleScript } from '~/utils/run.js';
 
 export async function getTableRows(
@@ -39,7 +40,9 @@ export async function selectTableRow(props: SelectTableRowProps) {
 		const tableIndex = props.row.path.findIndex(
 			(part) => part.type === 'table'
 		);
-		table = createBaseElementReference( props.row.path.slice(tableIndex));
+		table = createBaseElementReference(
+			pathPartsToPathString(props.row.path.slice(tableIndex))
+		);
 	} else {
 		table = props.table;
 	}
