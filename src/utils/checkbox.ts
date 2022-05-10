@@ -1,6 +1,7 @@
 import { outdent } from 'outdent';
 
 import type { BaseElementReference } from '~/utils/element-reference.js';
+import { tellProcess } from '~/utils/process.js';
 import { runAppleScript } from '~/utils/run.js';
 
 interface ToggleCheckboxProps {
@@ -22,13 +23,12 @@ export async function toggleCheckbox(props: ToggleCheckboxProps) {
 			checkboxAction = 'click theCheckbox';
 	}
 
-	await runAppleScript(
+	await tellProcess(
+		props.element.applicationProcess,
 		outdent`
-			tell application "System Events" to tell process ${props.element.applicationProcess}
-				set theCheckbox to ${props.element.pathString}
-				tell theCheckbox
-					${checkboxAction}
-				end tell
+			set theCheckbox to ${props.element.pathString}
+			tell theCheckbox
+				${checkboxAction}
 			end tell
 		`
 	);

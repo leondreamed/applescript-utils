@@ -3,18 +3,18 @@ import { outdent } from 'outdent';
 import { createBaseElementReference } from '~/utils/element.js';
 import type { BaseElementReference } from '~/utils/element-reference.js';
 import { pathPartsToPathString } from '~/utils/path.js';
+import { tellProcess } from '~/utils/process.js';
 import { runAppleScript } from '~/utils/run.js';
 
 export async function getTableRows(
 	tableElement: BaseElementReference
 ): Promise<BaseElementReference[]> {
-	const rowPathStrings = (await runAppleScript(outdent`
-		tell application "System Events"
-			tell process ${JSON.stringify(tableElement.applicationProcess)}
-				get rows of ${tableElement.pathString}
-			end tell
-		end tell
-	`)) as string[];
+	const rowPathStrings = (await tellProcess(
+		tableElement.applicationProcess,
+		outdent`
+			get rows of ${tableElement.pathString}
+		`
+	)) as string[];
 
 	return rowPathStrings.map((pathString) =>
 		createBaseElementReference(pathString)

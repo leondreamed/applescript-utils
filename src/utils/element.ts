@@ -5,6 +5,7 @@ import pWaitFor from 'p-wait-for';
 import type { BaseElementReference } from '~/utils/element-reference.js';
 import { ElementReference } from '~/utils/element-reference.js';
 import { pathStringToPathParts } from '~/utils/path.js';
+import { tellProcess } from '~/utils/process.js';
 import { runAppleScript } from '~/utils/run.js';
 
 export async function getElements(
@@ -66,15 +67,12 @@ export async function waitForElementExists({
 	elementReference,
 	interval = 0.1,
 }: WaitForElementProps) {
-	await runAppleScript(
+	await tellProcess(
+		elementReference.applicationProcess,
 		outdent`
-			tell application "System Events"
-				tell process ${JSON.stringify(elementReference.applicationProcess)}
-						repeat until exists ${elementReference.pathString}
-								delay ${interval}
-						end repeat
-				end tell
-			end tell
+			repeat until exists ${elementReference.pathString}
+					delay ${interval}
+			end repeat
 		`
 	);
 }
@@ -139,15 +137,12 @@ export async function getElementProperties(
 
 		if (elements.length === 0) return [];
 
-		const properties = (await runAppleScript(
+		const properties = (await tellProcess(
+			elements[0]!.applicationProcess,
 			outdent`
-				tell application "System Events"
-					tell process ${JSON.stringify(elements[0]!.applicationProcess)}
-						return {${elements
-							.map((element) => `get properties of ${element.pathString}`)
-							.join(',')}}
-					end tell
-				end tell
+				return {${elements
+					.map((element) => `get properties of ${element.pathString}`)
+					.join(',')}}
 			`
 		)) as Array<Record<string, unknown>>;
 
@@ -155,13 +150,10 @@ export async function getElementProperties(
 	} else {
 		const element = elementOrElements;
 
-		const properties = (await runAppleScript(
+		const properties = (await tellProcess(
+			element.applicationProcess,
 			outdent`
-				tell application "System Events"
-					tell process ${JSON.stringify(element.applicationProcess)}
-						get properties of ${element.pathString}
-					end tell
-				end tell
+				get properties of ${element.pathString}
 			`
 		)) as Record<string, unknown>;
 
