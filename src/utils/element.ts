@@ -122,16 +122,44 @@ export async function waitForElementMatch(
 
 export async function getElementProperties(
 	element: BaseElementReference
-): Promise<Record<string, unknown>> {
-	const properties = (await runAppleScript(
-		outdent`
-			tell application "System Events"
-				tell process ${JSON.stringify(element.applicationProcess)}
-					get properties of ${element.pathString}
-				end tell
-			end tell
-		`
-	)) as Record<string, unknown>;
+): Promise<Record<string, unknown>>;
+export async function getElementProperties(
+	elements: BaseElementReference[]
+): Promise<Array<Record<string, unknown>>>;
+export async function getElementProperties(
+	elementOrElements: BaseElementReference | BaseElementReference[]
+): Promise<Record<string, unknown> | Array<Record<string, unknown>>> {
+	if (Array.isArray(elementOrElements)) {
+		const elements = elementOrElements;
 
-	return properties;
+		if (elements.length === 0) return [];
+
+		const properties = (await runAppleScript(
+			outdent`
+				tell application "System Events"
+					tell process ${JSON.stringify(elements[0]!.applicationProcess)}
+						return {${elements
+							.map((element) => `get properties of ${element.pathString}`)
+							.join(',')}}
+					end tell
+				end tell
+			`
+		)) as Array<Record<string, unknown>>;
+
+		return properties;
+	} else {
+		const element = elementOrElements;
+
+		const properties = (await runAppleScript(
+			outdent`
+				tell application "System Events"
+					tell process ${JSON.stringify(element.applicationProcess)}
+						get properties of ${element.pathString}
+					end tell
+				end tell
+			`
+		)) as Record<string, unknown>;
+
+		return properties;
+	}
 }
