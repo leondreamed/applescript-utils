@@ -27,7 +27,7 @@ export async function clickElement(element: ElementReference) {
 	await runAppleScript(
 		outdent`
 			tell application "System Events"
-				tell process ${element.applicationProcess}
+				tell process ${JSON.stringify(element.applicationProcess)}
 					set myElement to a reference to ${element.pathString}
 					click myElement
 				end tell
