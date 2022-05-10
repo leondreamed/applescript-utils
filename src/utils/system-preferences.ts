@@ -1,8 +1,8 @@
 import { outdent } from 'outdent';
 
 import { toggleCheckbox } from '~/utils/checkbox.js';
+import { clickElement } from '~/utils/click.js';
 import {
-	clickElement,
 	createElementReferences,
 	getElements,
 	waitForElementExists,
