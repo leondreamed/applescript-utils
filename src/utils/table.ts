@@ -39,7 +39,7 @@ export async function selectTableRow(props: SelectTableRowProps) {
 		const tableIndex = props.row.path.findIndex(
 			(part) => part.type === 'table'
 		);
-		table = createBaseElementReference(props.row.path.slice(tableIndex));
+		table = createBaseElementReference( props.row.path.slice(tableIndex));
 	} else {
 		table = props.table;
 	}
