@@ -1,7 +1,7 @@
 import type { ElementPathPart } from '~/types/element.js';
 
 export function pathPartsToPathString(pathParts: ElementPathPart[]) {
-	return pathParts.join(' of ');
+	return pathParts.map((part) => part.fullName).join(' of ');
 }
 
 export function pathStringToPathParts(pathString: string): ElementPathPart[] {
