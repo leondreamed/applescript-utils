@@ -17,11 +17,13 @@ export async function setTextFieldValue(
 }
 
 export async function getTextFieldValue(element: BaseElementReference) {
-	await runAppleScript(outdent`
+	const textFieldValue = await runAppleScript(outdent`
 		tell application "System Events"
 		    tell process ${JSON.stringify(element.applicationProcess)}
 		        get value of ${element.pathString}
 		    end tell
 		end tell
 	`);
+
+	return textFieldValue;
 }
