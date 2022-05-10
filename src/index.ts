@@ -1,9 +1,10 @@
 export type { ElementPathPart } from './types/element.js';
 export { toggleCheckbox } from './utils/checkbox.js';
+export { clickElement } from './utils/click.js';
 export {
-	clickElement,
 	createBaseElementReference,
 	createElementReferences,
+	getElementProperties,
 	getElements,
 	waitForElementExists,
 	waitForElementHidden,

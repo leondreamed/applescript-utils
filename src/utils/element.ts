@@ -25,19 +25,6 @@ export async function getElements(
 	return elements;
 }
 
-export async function clickElement(element: BaseElementReference) {
-	await runAppleScript(
-		outdent`
-			tell application "System Events"
-				tell process ${JSON.stringify(element.applicationProcess)}
-					set myElement to a reference to ${element.pathString}
-					click myElement
-				end tell
-			end tell
-		`
-	);
-}
-
 export function createBaseElementReference(
 	elementPathString: string
 ): BaseElementReference {
@@ -130,4 +117,20 @@ export async function waitForElementMatch(
 	}, pWaitForOptions);
 
 	return matchingElement;
+}
+
+export async function getElementProperties(
+	element: BaseElementReference
+): Promise<Record<string, unknown>> {
+	const properties = (await runAppleScript(
+		outdent`
+			tell application "System Events"
+				tell process ${JSON.stringify(element.applicationProcess)}
+					get properties of ${element.pathString}
+				end tell
+			end tell
+		`
+	)) as Record<string, unknown>;
+
+	return properties;
 }
