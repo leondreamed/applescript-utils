@@ -17,3 +17,4 @@ export {
 	reopenSystemPreferences,
 } from './utils/system-preferences.js';
 export { waitForWindow } from './utils/window.js';
+export { ElementPathPart, ElementReference } from './types/element.js'
