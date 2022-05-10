@@ -15,6 +15,7 @@ export {
 	ElementReference,
 } from './utils/element-reference.js';
 export { inputKeystrokes } from './utils/keystroke.js';
+export { tellProcess } from './utils/process.js';
 export { runAppleScript } from './utils/run.js';
 export {
 	allowSystemSoftware,

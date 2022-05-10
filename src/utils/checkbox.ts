@@ -2,7 +2,6 @@ import { outdent } from 'outdent';
 
 import type { BaseElementReference } from '~/utils/element-reference.js';
 import { tellProcess } from '~/utils/process.js';
-import { runAppleScript } from '~/utils/run.js';
 
 interface ToggleCheckboxProps {
 	element: BaseElementReference;
