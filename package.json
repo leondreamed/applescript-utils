@@ -16,14 +16,8 @@
 	"type": "module",
 	"exports": "./src/index.ts",
 	"scripts": {
-		"release": "lionp",
-		"prepare": "lion-git-hooks",
 		"build": "node-ts ./scripts/build.ts",
-		"start": "node-ts ./src/index.ts",
-		"test": "vitest run",
-		"lint": "eslint --cache --fix .",
-		"prettier": "prettier --write .",
-		"typecheck": "tsc --noEmit"
+		"start": "node-ts ./src/index.ts"
 	},
 	"dependencies": {
 		"deep-equal": "^2.0.5",
@@ -36,6 +30,7 @@
 		"@types/deep-equal": "^1.0.1",
 		"@types/node": "^17.0.34",
 		"desm": "^1.2.0",
+		"lionconfig": "^1.7.7",
 		"typescript": "^4.6.4",
 		"vitest": "^0.12.6"
 	},
