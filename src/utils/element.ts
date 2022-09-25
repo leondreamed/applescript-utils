@@ -9,13 +9,14 @@ import { tellProcess } from '~/utils/process.js';
 import { runAppleScript } from '~/utils/run.js';
 
 export async function getElements(
-	processName: string
+	processName: string,
+	args: { frontWindow?: boolean } = {}
 ): Promise<ElementReference[]> {
 	const elements = createElementReferences(
 		(await runAppleScript(
 			outdent`
 				tell application "System Events"
-				  tell front window of process ${JSON.stringify(processName)}
+				  tell ${args.frontWindow ? 'front window of process' : 'process'} ${JSON.stringify(processName)}
 				    get entire contents
 				  end tell
 				end tell
